@@ -64,8 +64,8 @@ sub ensure {
             '
                CREATE TABLE IF NOT EXISTS register (
                   id INTEGER PRIMARY KEY,
-                     actor_id INTEGER REFERENCES actor(id),
                   activity_id INTEGER REFERENCES activity(id),
+                     actor_id INTEGER REFERENCES actor(id),
                       itsdate TEXT,
                        amount INTEGER
                )
