@@ -87,7 +87,7 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 actor_membership_items
+=head2 actor_membership_members
 
 Type: has_many
 
@@ -96,9 +96,9 @@ Related object: L<Gosh::Model::Schema::Result::ActorMembership>
 =cut
 
 __PACKAGE__->has_many(
-  "actor_membership_items",
+  "actor_membership_members",
   "Gosh::Model::Schema::Result::ActorMembership",
-  { "foreign.item_id" => "self.id" },
+  { "foreign.member_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -133,8 +133,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 03:50:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qk6zvCDkA+R3xISSfZZ2vA
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 05:32:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p5HUqvGls892+Gx1VzSDZw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

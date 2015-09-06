@@ -29,13 +29,13 @@ __PACKAGE__->table("catalog");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 actor_id
+=head2 activity_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 activity_id
+=head2 actor_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -51,7 +51,7 @@ __PACKAGE__->table("catalog");
   data_type: 'text'
   is_nullable: 1
 
-=head2 value
+=head2 amount
 
   data_type: 'integer'
   is_nullable: 1
@@ -61,15 +61,15 @@ __PACKAGE__->table("catalog");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "actor_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "activity_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "actor_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "date_start",
   { data_type => "text", is_nullable => 1 },
   "date_end",
   { data_type => "text", is_nullable => 1 },
-  "value",
+  "amount",
   { data_type => "integer", is_nullable => 1 },
 );
 
@@ -128,8 +128,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 03:50:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UUXYgjwj5nosBhQ24NSsrw
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 05:32:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5feyxSgV88Jk97ZHgL8XBg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

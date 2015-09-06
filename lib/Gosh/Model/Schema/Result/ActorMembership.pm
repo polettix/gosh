@@ -29,7 +29,7 @@ __PACKAGE__->table("actor_membership");
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 item_id
+=head2 member_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -40,25 +40,25 @@ __PACKAGE__->table("actor_membership");
 __PACKAGE__->add_columns(
   "group_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "item_id",
+  "member_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 UNIQUE CONSTRAINTS
 
-=head2 C<group_id_item_id_unique>
+=head2 C<group_id_member_id_unique>
 
 =over 4
 
 =item * L</group_id>
 
-=item * L</item_id>
+=item * L</member_id>
 
 =back
 
 =cut
 
-__PACKAGE__->add_unique_constraint("group_id_item_id_unique", ["group_id", "item_id"]);
+__PACKAGE__->add_unique_constraint("group_id_member_id_unique", ["group_id", "member_id"]);
 
 =head1 RELATIONS
 
@@ -82,7 +82,7 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 item
+=head2 member
 
 Type: belongs_to
 
@@ -91,9 +91,9 @@ Related object: L<Gosh::Model::Schema::Result::Actor>
 =cut
 
 __PACKAGE__->belongs_to(
-  "item",
+  "member",
   "Gosh::Model::Schema::Result::Actor",
-  { id => "item_id" },
+  { id => "member_id" },
   {
     is_deferrable => 0,
     join_type     => "LEFT",
@@ -103,8 +103,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 03:50:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ucCV0I1fUwmQr5x4Y3257Q
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 05:32:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NPerVuEoB9a9Vg7LCPeArA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
