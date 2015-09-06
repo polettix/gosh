@@ -59,6 +59,10 @@ sub actor         { return $_[0]->_get_it(actor    => $_[1]) }
 sub catalog_item  { return $_[0]->_get_it(catalog  => $_[1]) }
 sub register_item { return $_[0]->_get_it(register => $_[1]) }
 
+sub accounts {
+   my $schema = shift->schema();
+   return $schema->resultset('Account')->search({})->all();
+}
 
 'Lazyiness, Impatience, and Hubris';
 __END__
