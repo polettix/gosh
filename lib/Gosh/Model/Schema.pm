@@ -30,9 +30,9 @@ sub ensure {
             ',
             '
                CREATE TABLE IF NOT EXISTS actor_membership (
-                  group_id INTEGER references actor(id),
-                  item_id INTEGER references actor(id),
-                  UNIQUE(group_id, item_id)
+                   group_id INTEGER references actor(id),
+                  member_id INTEGER references actor(id),
+                  UNIQUE(group_id, member_id)
                )
             ',
             '
@@ -53,12 +53,12 @@ sub ensure {
             ',
             '
                CREATE TABLE IF NOT EXISTS catalog (
-                  id INTEGER PRIMARY KEY,
-                     actor_id INTEGER REFERENCES actor(id),
+                   id INTEGER PRIMARY KEY,
                   activity_id INTEGER REFERENCES activity(id),
-                  date_start TEXT,
+                     actor_id INTEGER REFERENCES actor(id),
+                   date_start TEXT,
                      date_end TEXT,
-                        value INTEGER
+                       amount INTEGER
                )
             ',
             '
@@ -66,9 +66,8 @@ sub ensure {
                   id INTEGER PRIMARY KEY,
                      actor_id INTEGER REFERENCES actor(id),
                   activity_id INTEGER REFERENCES activity(id),
-                  date_start TEXT,
-                     date_end TEXT,
-                        value INTEGER
+                      itsdate TEXT,
+                       amount INTEGER
                )
             '
          );
