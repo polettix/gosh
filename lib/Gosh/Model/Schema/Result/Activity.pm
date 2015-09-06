@@ -75,7 +75,7 @@ Related object: L<Gosh::Model::Schema::Result::Catalog>
 __PACKAGE__->has_many(
   "catalogs",
   "Gosh::Model::Schema::Result::Catalog",
-  { "foreign.activity_id" => "self.id" },
+  { "foreign.activity" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -90,13 +90,13 @@ Related object: L<Gosh::Model::Schema::Result::Register>
 __PACKAGE__->has_many(
   "registers",
   "Gosh::Model::Schema::Result::Register",
-  { "foreign.activity_id" => "self.id" },
+  { "foreign.activity" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 03:50:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZoSfHRI1PqMu9hR9axrBfg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:11:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cr6BQxsFDRFoydlN0w+woA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

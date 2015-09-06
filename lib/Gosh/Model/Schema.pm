@@ -30,15 +30,15 @@ sub ensure {
             ',
             '
                CREATE TABLE IF NOT EXISTS actor_membership (
-                   group_id INTEGER references actor(id),
-                  member_id INTEGER references actor(id),
-                  UNIQUE(group_id, member_id)
+                  thegroup INTEGER references actor(id),
+                    member INTEGER references actor(id),
+                  UNIQUE(thegroup, member)
                )
             ',
             '
                CREATE TABLE IF NOT EXISTS account (
                            id INTEGER PRIMARY KEY,
-                     actor_id INTEGER REFERENCES actor(id),
+                        actor INTEGER REFERENCES actor(id),
                      username TEXT UNIQUE,
                      password TEXT,
                   displayname TEXT
@@ -47,27 +47,27 @@ sub ensure {
             '
                CREATE TABLE IF NOT EXISTS activity (
                            id INTEGER PRIMARY KEY,
-                        name TEXT,
+                         name TEXT,
                   description TEXT
                )
             ',
             '
                CREATE TABLE IF NOT EXISTS catalog (
-                   id INTEGER PRIMARY KEY,
-                  activity_id INTEGER REFERENCES activity(id),
-                     actor_id INTEGER REFERENCES actor(id),
-                   date_start TEXT,
-                     date_end TEXT,
-                       amount INTEGER
+                  id INTEGER PRIMARY KEY,
+                    activity INTEGER REFERENCES activity(id),
+                       actor INTEGER REFERENCES actor(id),
+                  date_start TEXT,
+                    date_end TEXT,
+                      amount INTEGER
                )
             ',
             '
                CREATE TABLE IF NOT EXISTS register (
                   id INTEGER PRIMARY KEY,
-                  activity_id INTEGER REFERENCES activity(id),
-                     actor_id INTEGER REFERENCES actor(id),
-                      itsdate TEXT,
-                       amount INTEGER
+                    activity INTEGER REFERENCES activity(id),
+                       actor INTEGER REFERENCES actor(id),
+                     itsdate TEXT,
+                      amount INTEGER
                )
             '
          );

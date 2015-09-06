@@ -29,7 +29,7 @@ __PACKAGE__->table("account");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 actor_id
+=head2 actor
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -55,7 +55,7 @@ __PACKAGE__->table("account");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "actor_id",
+  "actor",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "username",
   { data_type => "text", is_nullable => 1 },
@@ -104,7 +104,7 @@ Related object: L<Gosh::Model::Schema::Result::Actor>
 __PACKAGE__->belongs_to(
   "actor",
   "Gosh::Model::Schema::Result::Actor",
-  { id => "actor_id" },
+  { id => "actor" },
   {
     is_deferrable => 0,
     join_type     => "LEFT",
@@ -114,8 +114,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 03:50:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8QRkV45UpxSno2OjM3L4ew
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:11:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jUFBNe+wEOuasnH++R/kUg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

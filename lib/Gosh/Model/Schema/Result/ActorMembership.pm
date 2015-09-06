@@ -23,13 +23,13 @@ __PACKAGE__->table("actor_membership");
 
 =head1 ACCESSORS
 
-=head2 group_id
+=head2 thegroup
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 member_id
+=head2 member
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -38,49 +38,29 @@ __PACKAGE__->table("actor_membership");
 =cut
 
 __PACKAGE__->add_columns(
-  "group_id",
+  "thegroup",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "member_id",
+  "member",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 UNIQUE CONSTRAINTS
 
-=head2 C<group_id_member_id_unique>
+=head2 C<thegroup_member_unique>
 
 =over 4
 
-=item * L</group_id>
+=item * L</thegroup>
 
-=item * L</member_id>
+=item * L</member>
 
 =back
 
 =cut
 
-__PACKAGE__->add_unique_constraint("group_id_member_id_unique", ["group_id", "member_id"]);
+__PACKAGE__->add_unique_constraint("thegroup_member_unique", ["thegroup", "member"]);
 
 =head1 RELATIONS
-
-=head2 group
-
-Type: belongs_to
-
-Related object: L<Gosh::Model::Schema::Result::Actor>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "group",
-  "Gosh::Model::Schema::Result::Actor",
-  { id => "group_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
-);
 
 =head2 member
 
@@ -93,7 +73,27 @@ Related object: L<Gosh::Model::Schema::Result::Actor>
 __PACKAGE__->belongs_to(
   "member",
   "Gosh::Model::Schema::Result::Actor",
-  { id => "member_id" },
+  { id => "member" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
+
+=head2 thegroup
+
+Type: belongs_to
+
+Related object: L<Gosh::Model::Schema::Result::Actor>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "thegroup",
+  "Gosh::Model::Schema::Result::Actor",
+  { id => "thegroup" },
   {
     is_deferrable => 0,
     join_type     => "LEFT",
@@ -103,8 +103,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 05:32:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NPerVuEoB9a9Vg7LCPeArA
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:11:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qrzh9Zesh3HGDtkU5F7zSg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
