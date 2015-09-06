@@ -5,6 +5,7 @@ use 5.018_001;
 our $VERSION = '0.01';
 use English qw< -no_match_vars >;
 
+use Log::Log4perl::Tiny qw< :easy :dead_if_first >;
 use Gosh::Model::Schema;
 use Moo;
 
@@ -45,6 +46,65 @@ sub BUILD_schema {
    $schema->ensure();
    return $schema;
 } ## end sub BUILD_schema
+
+
+sub actors_for_account {
+   my ($self, $account) = @_;
+   $account = $self->schema()->resultset('Account')->find($account)
+      unless ref $account;
+   INFO "got account: ", $account->displayname();
+   my $actor = $account->actor();
+   return ($actor, $actor->all_groups());
+}
+
+sub catalog_for_account {
+   my ($self, $account, $best_between) = @_;
+
+   # $better_between is a comparison function that returns the "best"
+   # between two catalog items
+   $best_between //= sub {
+      $_[0]->amount() >= $_[1]->amount() ? $_[0] : $_[1]
+   };
+
+   # this will hold the result, also allowing us to efficiently compare
+   # different alternative catalog items in order to always keep the
+   # best one
+   my %catalog;
+
+   # we will analyze all catalogs from all actor groups we are part of
+   my @actors = $self->actors_for_account($account);
+   for my $actor (@actors) {
+      for my $item ($actor->catalogs()) {
+         my $id = $item->get_column('activity');
+         if (exists $catalog{$id}) {
+            $catalog{$id} = $best_between->($catalog{$id}, $item);
+         }
+         else {
+            $catalog{$id} = $item;
+         }
+      }
+   }
+
+   # the catalog might be big... allow for returning an array reference
+   # in scalar context (better: in non-list context)
+   my @retval = values %catalog;
+   return wantarray() ? @retval : \@retval;
+}
+
+sub plain_catalog_for_account {
+   my $self = shift;
+   my $catalog = $self->catalog_for_account(@_);
+   my @retval = map {
+      my $activity = $_->activity();
+      {
+         catalog_id => $_->id(),
+         activity_id => $activity->id(),
+         name => $activity->name(),
+         amount => $_->amount(),
+      }
+   } @$catalog;
+   return wantarray() ? @retval : \@retval;
+}
 
 'Lazyiness, Impatience, and Hubris';
 __END__

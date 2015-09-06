@@ -8,15 +8,16 @@ INSERT INTO "actor" VALUES(1,'Silvia');
 INSERT INTO "actor" VALUES(2,'Flavio');
 INSERT INTO "actor" VALUES(3,'Silvia & Flavio');
 CREATE TABLE actor_membership (
-                   group_id INTEGER references actor(id),
-                  member_id INTEGER references actor(id),
-                  UNIQUE(group_id, member_id)
+                        id INTEGER PRIMARY KEY,
+                    member INTEGER references actor(id),
+                  itsgroup INTEGER references actor(id),
+                  UNIQUE(member, itsgroup)
                );
-INSERT INTO "actor_membership" VALUES(3,1);
-INSERT INTO "actor_membership" VALUES(3,2);
+INSERT INTO "actor_membership" VALUES(1,1,3);
+INSERT INTO "actor_membership" VALUES(2,2,3);
 CREATE TABLE account (
                            id INTEGER PRIMARY KEY,
-                     actor_id INTEGER REFERENCES actor(id),
+                        actor INTEGER REFERENCES actor(id),
                      username TEXT UNIQUE,
                      password TEXT,
                   displayname TEXT
@@ -25,7 +26,7 @@ INSERT INTO "account" VALUES(1,1,'silvia','silvia','Silvia Nardoni');
 INSERT INTO "account" VALUES(2,2,'polettix','flavio','Flavio Poletti');
 CREATE TABLE activity (
                            id INTEGER PRIMARY KEY,
-                        name TEXT,
+                         name TEXT,
                   description TEXT
                );
 INSERT INTO "activity" VALUES(1,'lavatrice',NULL);
@@ -104,12 +105,12 @@ INSERT INTO "activity" VALUES(73,'spesa impegnativa',NULL);
 INSERT INTO "activity" VALUES(74,'cambiare le lenzuola',NULL);
 INSERT INTO "activity" VALUES(75,'pulire un ripiano del frigo',NULL);
 CREATE TABLE catalog (
-                   id INTEGER PRIMARY KEY,
-                  activity_id INTEGER REFERENCES activity(id),
-                     actor_id INTEGER REFERENCES actor(id),
-                   date_start TEXT,
-                     date_end TEXT,
-                       amount INTEGER
+                  id INTEGER PRIMARY KEY,
+                    activity INTEGER REFERENCES activity(id),
+                       actor INTEGER REFERENCES actor(id),
+                  date_start TEXT,
+                    date_end TEXT,
+                      amount INTEGER
                );
 INSERT INTO "catalog" VALUES(1,1,3,NULL,NULL,100);
 INSERT INTO "catalog" VALUES(2,2,3,NULL,NULL,120);
@@ -188,9 +189,9 @@ INSERT INTO "catalog" VALUES(74,74,3,NULL,NULL,80);
 INSERT INTO "catalog" VALUES(75,75,3,NULL,NULL,30);
 CREATE TABLE register (
                   id INTEGER PRIMARY KEY,
-                     actor_id INTEGER REFERENCES actor(id),
-                  activity_id INTEGER REFERENCES activity(id),
-                      itsdate TEXT,
-                       amount INTEGER
+                    activity INTEGER REFERENCES activity(id),
+                       actor INTEGER REFERENCES actor(id),
+                     itsdate TEXT,
+                      amount INTEGER
                );
 COMMIT;

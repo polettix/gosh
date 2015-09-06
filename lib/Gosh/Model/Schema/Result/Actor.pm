@@ -136,6 +136,50 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:15:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XLBiW6Iz6pg//+veK7E1Ag
 
+use Log::Log4perl::Tiny qw< :easy >;
+
+sub direct_members {
+   my $self = shift;
+   return map { $_->member() } $self->actor_membership_itsgroups();
+}
+
+sub all_members {
+   my $self = shift;
+   my @retval;
+   my %flag_for = ($self->id() => 1 );
+   my @queue = $self->direct_members();
+   while (@queue) {
+      my $candidate = shift @queue;
+      my $id = $candidate->id();
+      next if $flag_for{$id}; # skip to avoid infinite cycling
+      $flag_for{$id} = 1; # mark node
+      push @retval, $candidate;
+      push @queue, $candidate->direct_members();
+   }
+   return @retval;
+}
+
+sub direct_groups {
+   my $self = shift;
+   return map { $_->itsgroup() } $self->actor_membership_members();
+}
+
+sub all_groups {
+   my $self = shift;
+   my @retval;
+   my %flag_for = ($self->id() => 1);
+   my @queue = $self->direct_groups();
+   while (@queue) {
+      my $candidate = shift @queue;
+      my $id = $candidate->id();
+      next if $flag_for{$id}; # skip to avoid infinite cycling
+      $flag_for{$id} = 1; # mark node
+      push @retval, $candidate;
+      push @queue, $candidate->direct_groups();
+   }
+   return @retval;
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
