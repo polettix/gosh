@@ -117,6 +117,72 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:11:04
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jUFBNe+wEOuasnH++R/kUg
 
+use Gosh::Util qw< now >;
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub schema { return shift->result_source()->schema() }
+
+sub as_hash {
+   my $self = shift;
+   my %retval = $self->get_columns();
+   $retval{actor} = $self->actor()->as_hash();
+   return \%retval;
+}
+
+sub actors {
+   my $actor = shift->actor();
+   return ($actor, $actor->all_groups());
+}
+
+sub catalog {
+   my ($self, $best_between) = @_;
+
+   # $best_between is a comparison function that returns the "best"
+   # between two catalog items
+   $best_between //= sub {
+      $_[0]->amount() >= $_[1]->amount() ? $_[0] : $_[1];
+   };
+
+   # this will hold the result, also allowing us to efficiently compare
+   # different alternative catalog items in order to always keep the
+   # best one
+   my %catalog;
+
+   # we will analyze all catalogs from all actor groups we are part of
+   for my $actor ($self->actors()) {
+      for my $item ($actor->catalogs()) {
+         my $id = $item->get_column('activity');
+         if (exists $catalog{$id}) {
+            $catalog{$id} = $best_between->($catalog{$id}, $item);
+         }
+         else {
+            $catalog{$id} = $item;
+         }
+      } ## end for my $item ($actor->catalogs...)
+   } ## end for my $actor (@actors)
+
+   # the catalog might be big... allow for returning an array reference
+   # in scalar context (better: in non-list context)
+   my @retval = values %catalog;
+   return wantarray() ? @retval : \@retval;
+}
+
+sub create_record {
+   my $self = shift;
+   my %args = (@_ && ref($_[0])) ? %{$_[0]} : @_;
+   for my $key (qw< activity amount >) {
+      die {message => "missing value for '$_'"}
+         unless defined $args{$key};
+   }
+   return $self->schema()->resultset('Register')->create(
+      {
+         actor => $self->actor(),
+         itsdate => $args{date} // now(),
+         activity => $args{activity},
+         amount => $args{amount},
+      }
+   );
+}
+
+sub list_records { return shift->actor()->registers() }
+
 1;

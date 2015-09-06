@@ -47,64 +47,18 @@ sub BUILD_schema {
    return $schema;
 } ## end sub BUILD_schema
 
-
-sub actors_for_account {
-   my ($self, $account) = @_;
-   $account = $self->schema()->resultset('Account')->find($account)
-      unless ref $account;
-   INFO "got account: ", $account->displayname();
-   my $actor = $account->actor();
-   return ($actor, $actor->all_groups());
+sub _get_it {
+   my ($self, $type, $id) = @_;
+   return $id if ref $id;
+   return $self->schema()->resultset(ucfirst(lc($type)))->find($id);
 }
 
-sub catalog_for_account {
-   my ($self, $account, $best_between) = @_;
+sub account       { return $_[0]->_get_it(account  => $_[1]) }
+sub activity      { return $_[0]->_get_it(activity => $_[1]) }
+sub actor         { return $_[0]->_get_it(actor    => $_[1]) }
+sub catalog_item  { return $_[0]->_get_it(catalog  => $_[1]) }
+sub register_item { return $_[0]->_get_it(register => $_[1]) }
 
-   # $better_between is a comparison function that returns the "best"
-   # between two catalog items
-   $best_between //= sub {
-      $_[0]->amount() >= $_[1]->amount() ? $_[0] : $_[1]
-   };
-
-   # this will hold the result, also allowing us to efficiently compare
-   # different alternative catalog items in order to always keep the
-   # best one
-   my %catalog;
-
-   # we will analyze all catalogs from all actor groups we are part of
-   my @actors = $self->actors_for_account($account);
-   for my $actor (@actors) {
-      for my $item ($actor->catalogs()) {
-         my $id = $item->get_column('activity');
-         if (exists $catalog{$id}) {
-            $catalog{$id} = $best_between->($catalog{$id}, $item);
-         }
-         else {
-            $catalog{$id} = $item;
-         }
-      }
-   }
-
-   # the catalog might be big... allow for returning an array reference
-   # in scalar context (better: in non-list context)
-   my @retval = values %catalog;
-   return wantarray() ? @retval : \@retval;
-}
-
-sub plain_catalog_for_account {
-   my $self = shift;
-   my $catalog = $self->catalog_for_account(@_);
-   my @retval = map {
-      my $activity = $_->activity();
-      {
-         catalog_id => $_->id(),
-         activity_id => $activity->id(),
-         name => $activity->name(),
-         amount => $_->amount(),
-      }
-   } @$catalog;
-   return wantarray() ? @retval : \@retval;
-}
 
 'Lazyiness, Impatience, and Hubris';
 __END__

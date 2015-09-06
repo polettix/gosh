@@ -180,6 +180,16 @@ sub all_groups {
    return @retval;
 }
 
+sub as_hash { return +{ shift->get_columns() } }
+
+sub all_accounts {
+   my $self = shift;
+   if (my @retval = $self->accounts()) {
+      return @retval;
+   }
+   return map { $_->all_accounts() } $self->all_members();
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

@@ -132,5 +132,12 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EBNCNON0iAtowRFAhN+vmA
 
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub as_hash {
+   my $self = shift;
+   my %retval = $self->get_columns();
+   $retval{activity} = $self->activity()->as_hash();
+   $retval{actor} = $self->actor()->as_hash();
+   return \%retval;
+}
+
 1;
