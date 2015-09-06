@@ -5,6 +5,8 @@ requires 'Log::Log4perl::Tiny', '1.002007';
 requires 'Moo', '2.000002';
 requires 'DBIx::Class', '0.082820';
 requires 'DBIx::Class::Schema::Loader', '0.07043';
+requires 'Mojolicious', '6.18';
+requires 'YAML::Tiny', '1.69';
 
 on test => sub {
     requires 'Test::More', '0.96';
