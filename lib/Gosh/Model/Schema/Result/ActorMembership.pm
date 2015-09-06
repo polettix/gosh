@@ -23,13 +23,13 @@ __PACKAGE__->table("actor_membership");
 
 =head1 ACCESSORS
 
-=head2 thegroup
+=head2 member
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 member
+=head2 itsgroup
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -38,29 +38,49 @@ __PACKAGE__->table("actor_membership");
 =cut
 
 __PACKAGE__->add_columns(
-  "thegroup",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "member",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "itsgroup",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 UNIQUE CONSTRAINTS
 
-=head2 C<thegroup_member_unique>
+=head2 C<member_itsgroup_unique>
 
 =over 4
 
-=item * L</thegroup>
-
 =item * L</member>
+
+=item * L</itsgroup>
 
 =back
 
 =cut
 
-__PACKAGE__->add_unique_constraint("thegroup_member_unique", ["thegroup", "member"]);
+__PACKAGE__->add_unique_constraint("member_itsgroup_unique", ["member", "itsgroup"]);
 
 =head1 RELATIONS
+
+=head2 itsgroup
+
+Type: belongs_to
+
+Related object: L<Gosh::Model::Schema::Result::Actor>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "itsgroup",
+  "Gosh::Model::Schema::Result::Actor",
+  { id => "itsgroup" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
 
 =head2 member
 
@@ -82,29 +102,9 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 thegroup
 
-Type: belongs_to
-
-Related object: L<Gosh::Model::Schema::Result::Actor>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "thegroup",
-  "Gosh::Model::Schema::Result::Actor",
-  { id => "thegroup" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:11:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qrzh9Zesh3HGDtkU5F7zSg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:15:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FxEHwRsS+YvtcMRKGP9emw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

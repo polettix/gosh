@@ -72,6 +72,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 actor_membership_itsgroups
+
+Type: has_many
+
+Related object: L<Gosh::Model::Schema::Result::ActorMembership>
+
+=cut
+
+__PACKAGE__->has_many(
+  "actor_membership_itsgroups",
+  "Gosh::Model::Schema::Result::ActorMembership",
+  { "foreign.itsgroup" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 actor_membership_members
 
 Type: has_many
@@ -84,21 +99,6 @@ __PACKAGE__->has_many(
   "actor_membership_members",
   "Gosh::Model::Schema::Result::ActorMembership",
   { "foreign.member" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 actor_membership_thegroups
-
-Type: has_many
-
-Related object: L<Gosh::Model::Schema::Result::ActorMembership>
-
-=cut
-
-__PACKAGE__->has_many(
-  "actor_membership_thegroups",
-  "Gosh::Model::Schema::Result::ActorMembership",
-  { "foreign.thegroup" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -133,8 +133,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:11:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:w7BYfB89JOir60cDPFXApw
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:15:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XLBiW6Iz6pg//+veK7E1Ag
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

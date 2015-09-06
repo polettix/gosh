@@ -30,9 +30,9 @@ sub ensure {
             ',
             '
                CREATE TABLE IF NOT EXISTS actor_membership (
-                  thegroup INTEGER references actor(id),
                     member INTEGER references actor(id),
-                  UNIQUE(thegroup, member)
+                  itsgroup INTEGER references actor(id),
+                  UNIQUE(member, itsgroup)
                )
             ',
             '
