@@ -30,6 +30,7 @@ sub ensure {
             ',
             '
                CREATE TABLE IF NOT EXISTS actor_membership (
+                        id INTEGER PRIMARY KEY,
                     member INTEGER references actor(id),
                   itsgroup INTEGER references actor(id),
                   UNIQUE(member, itsgroup)

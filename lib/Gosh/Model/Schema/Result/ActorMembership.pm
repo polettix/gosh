@@ -23,6 +23,12 @@ __PACKAGE__->table("actor_membership");
 
 =head1 ACCESSORS
 
+=head2 id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 member
 
   data_type: 'integer'
@@ -38,11 +44,25 @@ __PACKAGE__->table("actor_membership");
 =cut
 
 __PACKAGE__->add_columns(
+  "id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "member",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itsgroup",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("id");
 
 =head1 UNIQUE CONSTRAINTS
 
@@ -103,8 +123,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 06:15:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FxEHwRsS+YvtcMRKGP9emw
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-09-06 07:10:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:W4FDIBNSZxnYSpLIrqfqGQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
