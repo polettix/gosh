@@ -166,11 +166,11 @@ sub catalog {
    return wantarray() ? @retval : \@retval;
 }
 
-sub create_record {
+sub create_registration {
    my $self = shift;
    my %args = (@_ && ref($_[0])) ? %{$_[0]} : @_;
    for my $key (qw< activity amount >) {
-      die {message => "missing value for '$_'"}
+      die {message => "missing value for '$key'"}
          unless defined $args{$key};
    }
    return $self->schema()->resultset('Register')->create(
@@ -183,6 +183,6 @@ sub create_record {
    );
 }
 
-sub list_records { return shift->actor()->registers() }
+sub register { return shift->actor()->registers() }
 
 1;
