@@ -79,7 +79,7 @@ sub list_register {
    my $c       = shift;
    my $account = $c->app()->model()->account($c->param('aid'))
       or return _render($c, code => 404);
-   $c->render(json => {catalog => [plainify($account->register())]});
+   $c->render(json => {register => [plainify($account->register())]});
 }
 
 sub create_registration {
