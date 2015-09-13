@@ -7,7 +7,7 @@ use English qw< -no_match_vars >;
 
 use Log::Log4perl::Tiny qw< :easy :dead_if_first LOGLEVEL >;
 use Gosh::Model;
-use Gosh::Util qw< plainify >;
+use Gosh::Util qw< plainify normalize_or_now >;
 use Mojo::Base 'Mojolicious';
 use YAML::Tiny;
 use Data::Dumper;
