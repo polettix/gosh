@@ -7,6 +7,8 @@ requires 'DBIx::Class', '0.082820';
 requires 'DBIx::Class::Schema::Loader', '0.07043';
 requires 'Mojolicious', '6.18';
 requires 'YAML::Tiny', '1.69';
+requires 'Plack', '1.0037';
+requires 'Plack::Middleware::CrossOrigin', '0.012';
 
 on test => sub {
     requires 'Test::More', '0.96';
