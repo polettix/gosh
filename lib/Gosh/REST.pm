@@ -86,7 +86,9 @@ sub create_registration {
    my $c    = shift;
    my $account = $c->app()->model()->account($c->param('aid'))
       or return _render($c, code => 404);
-   my $registration = $account->create_registration($c->req()->json());
+   my $args = $c->req()->json();
+   $args->{date} = normalize_or_now($args->{date});
+   my $registration = $account->create_registration($args);
    $c->render(json => {registration => $registration->as_hash()});
 }
 
