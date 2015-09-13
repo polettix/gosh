@@ -24,8 +24,6 @@ sub config {
 sub startup {
    my $self = shift;
 
-   DEBUG "$self";
-
    $self->moniker('Gosh-REST');
    $self->secrets(['Il Carrozzone']);
 
