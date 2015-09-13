@@ -41,6 +41,7 @@ sub startup {
    $r->get('/account/:aid/catalog'  => \&list_catalog);
    $r->get('/account/:aid/register' => \&list_register);
    $r->post('/account/:aid/register' => \&create_registration);
+   $r->options('/account/:aid/register' => \&create_registration_options);
    $r->delete('/register/:rid'              => \&delete_registration);
    $r->delete('/account/:aid/register/:rid' => \&delete_registration);
 
@@ -82,6 +83,13 @@ sub create_registration {
       or return _render($c, code => 404);
    my $registration = $account->create_registration($c->req()->json());
    $c->render(json => {registration => $registration->as_hash()});
+}
+
+sub create_registration_options {
+   my $c = shift;
+   DEBUG 'got here at least';
+   $c->rendered(204);
+   return;
 }
 
 sub delete_registration {
