@@ -67,7 +67,12 @@ sub list_catalog {
    my $c       = shift;
    my $account = $c->app()->model()->account($c->param('aid'))
       or return _render($c, code => 404);
-   $c->render(json => {catalog => [plainify($account->catalog())]});
+   my @catalog =
+      map  { $_->[1] }
+      sort { $a->[0] <=> $b->[0] }
+      map  { [$_->{id} => $_] }
+      plainify($account->catalog());
+   $c->render(json => {catalog => \@catalog});
 }
 
 sub list_register {
