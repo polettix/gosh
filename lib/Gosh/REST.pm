@@ -15,12 +15,6 @@ $Data::Dumper::Indent = 1;
 
 has 'model';
 
-sub config {
-   my $self = shift;
-   my $filename = $ENV{GOSH_REST_CONFIG} // $self->moniker() . '.yml';
-   return -e $filename ? YAML::Tiny::LoadFile($filename) : {};
-}
-
 sub startup {
    my $self = shift;
 
@@ -28,7 +22,6 @@ sub startup {
    $self->secrets(['Il Carrozzone']);
 
    my $config = $self->config();
-   LOGLEVEL(uc($config->{loglevel} // 'DEBUG'));
 
    my $model = Gosh::Model->new(%{$config->{model} // {}});
    $self->model($model);
