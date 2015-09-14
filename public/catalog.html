@@ -1,0 +1,41 @@
+<div id="catalog" class="catalog">
+
+   <!-- notifications -->
+   <div ng-repeat="(id, notification) in notifications track by id">
+      <growl-notification class="img-rounded {{notification.class}}"
+            ng-click="$growlNotification.remove()">
+         {{notification.text}}
+      </growl-notification>
+   </div>
+
+   <!-- real catalog stuff -->
+   <div class="catalog-contents" ng-model="catalogModel"
+         ng-show="catalogModel.catalog.length > 0">
+      <form>
+         <div class="catalog-item" ng-repeat="item in catalogModel.catalog">
+            <button type="button" id="cat{{ item.id }}"
+                  ng-click="catalogCtrl.open(item)"
+                  ng-hide="catalogCtrl.is_open(item)"
+                  class="btn btn-sm btn-primary">
+               {{item.activity.name}} [{{item.amount}}]
+            </button>
+            <div class="panel panel-default"
+                  ng-show="catalogCtrl.is_open(item)"
+                  ng-click="false && catalogCtrl.close()">
+               <div class="panel-heading" ng-click="catalogCtrl.close()">
+                  <h3 class="panel-title">{{item.activity.name}}</h3>
+               </div>
+               <div class="panel-body">
+                  <input type="text" ng-model="item.date" jqdatepicker
+                        class="datepicker" /><br />
+                  <button
+                     type="button" ng-click="catalogCtrl.record(item)"
+                     class="btn btn-sm btn-success">registra</button>
+                  <input type="text" ng-model="item.selected_amount"
+                        class="amount"/> punti
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>

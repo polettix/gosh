@@ -1,0 +1,57 @@
+div.main-container {
+   margin-top: 2em;
+}
+div.catalog-item {
+   display: inline;
+}
+div.catalog-item > button {
+   margin-top: 2px;
+   margin-bottom: 2px;
+}
+div.catalog-selection {
+   border: 1px solid green;
+}
+.panel-title, .panel-body {
+   text-align: center;
+}
+.panel {
+   max-width: 60em;
+}
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+input.datepicker, input.amount {
+   font-family: monospace;
+   text-align: center;
+   width: 7em;
+   margin-bottom: 0.5em;
+}
+input.amount {
+   width: 3em;
+}
+button.ui-datepicker-trigger > img {
+   width: 1.5em;
+}
+div.container > div.navbar-header > a.navbar-brand {
+   color: white;
+}
+a.dropdown-toggle {
+   color: #FF8C00  ;
+   color: #7FFFD4  ;
+   color: #FFA500  ;
+}
+growl-notification {
+   background-color: #070;
+   color: white;
+   opacity: 0.7;
+   padding: 15px 30px;
+   margin-bottom: 15px;
+   position: fixed;
+   right: 1em;
+}
+growl-notification.success {
+   background-color: #070;
+   color: white;
+}
+growl-notification.failure {
+   background-color: #700;
+   color: white;
+}

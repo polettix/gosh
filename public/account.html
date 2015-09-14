@@ -1,0 +1,12 @@
+<a href="#"
+      ng-model="accountModel"
+      ng-show="accountModel.accounts.length > 0"
+      class="dropdown-toggle"
+      data-toggle="dropdown"
+      role="button"
+      aria-haspopup="true"
+      aria-expanded="false">{{accountModel.account.username}} <span class="caret"></span></a>
+<ul class="dropdown-menu">
+   <li ng-repeat="account in accountModel.accounts"><a
+      href="#" ng-click="accountCtrl.choose(account)">{{account.username}}</a></li>
+</ul>
