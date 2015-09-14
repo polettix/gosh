@@ -1,0 +1,108 @@
+#!/usr/bin/env wrapperl
+use 5.018001;
+use strict;
+use warnings;
+
+use Log::Log4perl::Tiny qw< :easy :no_extra_logdie_message >;
+use YAML::Tiny;
+use Mojo::Server::PSGI;
+use Plack::Builder;
+use Gosh::REST;
+
+my %default_config = (
+   plackup => [qw< --port 3000 >],
+   logger  => {
+      level    => 'DEBUG',
+      layout   => '[%d] [%-5P:%-5p] %m%n',
+      channels => [fh => \*STDERR],
+   },
+);
+
+# initial setup
+my $config = load_configuration(\%default_config, @ARGV);
+initialize_logging($config);
+
+# PSGI-compatible app, including middlewares
+my $app = psgi_app($config);
+
+# if included, just return now
+return $app if caller();
+
+# otherwise, use Plack::Runner
+plack_run($config, $app);
+
+sub load_configuration {
+   my $defaults = shift;
+   my $filename = shift // $ENV{GOSH_REST_CONFIG} // 'Gosh-REST.yml';
+   my %config   = (%$defaults,
+      %{(-e $filename) ? YAML::Tiny::LoadFile($filename) : {}});
+   return \%config;
+} ## end sub load_configuration
+
+sub initialize_logging {
+   my $config = shift;
+
+   # adjust logger channels if coming from YAML configuration file
+   if (defined $config->{logger}{channels}) {
+      my @ichannels = @{$config->{logger}{channels}};
+      my @ochannels;
+      while (@ichannels) {
+         my $item = shift @ichannels;
+         my ($type, $val) =
+           ref($item) ? %$item : ($item, shift(@ichannels));
+         if (($type eq 'fh') && (!ref($val))) {
+            $val =
+                ($val eq 'STDOUT') ? \*STDOUT
+              : ($val eq 'STDERR') ? \*STDERR
+              :                      die "invalid fh: $val\n";
+         } ## end if (($type eq 'fh') &&...)
+         push @ochannels, $type, $val;
+      } ## end while (@ichannels)
+      $config->{logger}{channels} = \@ochannels;
+   } ## end if (defined $config->{...})
+
+   Log::Log4perl->easy_init($config->{logger});
+
+   return $config;
+} ## end sub initialize_logging
+
+sub psgi_app {
+   my $config = shift;
+   my $app_config = $config->{'Gosh::REST'} // {};
+   my $bare_app = Gosh::REST->new(config => $app_config);
+   my $server = Mojo::Server::PSGI->new(app => $bare_app);
+   my $app = $server->to_psgi_app();
+   return builder {
+      for my $mw (@{$config->{'middlewares'}}) {
+         my ($name, $args) = %$mw;
+         $args //= [];
+         $args = [%$args] if ref($args) eq 'HASH';
+         $args = [$args] unless ref($args) eq 'ARRAY';
+         INFO "enabling middleware $name";
+         enable $name, @$args;
+      } ## end for my $mw (@{$config->...})
+      $app;
+   };
+};
+
+sub plack_run {
+   my ($config, $app) = @_;
+
+   INFO "direct execution, using Plack::Runner";
+   require Plack::Runner;
+   my $runner = Plack::Runner->new();
+
+   # I don't probably need to use package @ARGV here, but I will
+   # just to be on the safe side
+   local @ARGV = map {
+      if (ref($_)) {
+         my ($key, $value) = %$_;
+         $key = "--$key" if substr($key, 0, 1) ne '-';
+         $key => $value;
+      } ## end if (ref($_))
+      else { $_ }
+   } @{$config->{plackup} || []};
+   $runner->parse_options(@ARGV);
+
+   $runner->run($app);
+}
