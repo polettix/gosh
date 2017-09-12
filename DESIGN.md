@@ -86,4 +86,86 @@ A basic interaction model is the following:
   added in the Register, with a timestamp and the amount of points granted
   (which should generally be taken from the Catalog).
 
+In addition to the concepts above, there is also an `Account` primitive
+that eases the integration as webservice (of course this can be extended
+or substituted):
 
+* Account: set of credentials tied to an Actor (most probably, not a group
+  one). The following data are stored for an Account:
+
+    * `actor`: the Actor that this Account is tied to
+
+    * `displayname`: the name that should be displayed... wherever this
+      makes sense
+
+    * `id`: unique identifier for the Account
+
+    * `password`: a password associated to the Account for a simple
+      username/password authentication scheme
+
+    * `username`: the username for the account. This MUST be unique across
+      the whole platform, in the assumption that multiple tenants will
+      probably use multiple instances if needed.
+
+It is important to remember that the Account is provided only for easing
+the integration with a portal, but the same might be accomplished in other
+ways while still consuming APIs from GOSH.
+
+## Database Schema Example
+
+    CREATE TABLE actor (
+                            id INTEGER PRIMARY KEY,
+                   displayname TEXT
+                );
+    INSERT INTO "actor" VALUES(1,'Silvia');
+    INSERT INTO "actor" VALUES(2,'Flavio');
+    INSERT INTO "actor" VALUES(3,'Silvia & Flavio');
+    CREATE TABLE actor_membership (
+                            id INTEGER PRIMARY KEY,
+                        member INTEGER references actor(id),
+                      itsgroup INTEGER references actor(id),
+                               UNIQUE(member, itsgroup)
+                );
+    INSERT INTO "actor_membership" VALUES(1,1,3);
+    INSERT INTO "actor_membership" VALUES(2,2,3);
+    CREATE TABLE account (
+                            id INTEGER PRIMARY KEY,
+                         actor INTEGER REFERENCES actor(id),
+                      username TEXT UNIQUE,
+                      password TEXT,
+                   displayname TEXT
+                );
+    INSERT INTO "account" VALUES(1,1,'silvia','silvia','Silvia Nardoni');
+    INSERT INTO "account" VALUES(2,2,'polettix','flavio','Flavio Poletti');
+    CREATE TABLE activity (
+                            id INTEGER PRIMARY KEY,
+                          name TEXT,
+                   description TEXT
+                );
+    INSERT INTO "activity" VALUES(1,'lavatrice',NULL);
+    INSERT INTO "activity" VALUES(2,'stendere lavatrice',NULL);
+    INSERT INTO "activity" VALUES(3,'piegare panni asciutti',NULL);
+    INSERT INTO "activity" VALUES(4,'riporre panni nei cassetti',NULL);
+    ...
+    INSERT INTO "activity" VALUES(75,'pulire un ripiano del frigo',NULL);
+    CREATE TABLE catalog (
+                            id INTEGER PRIMARY KEY,
+                      activity INTEGER REFERENCES activity(id),
+                         actor INTEGER REFERENCES actor(id),
+                    date_start TEXT,
+                      date_end TEXT,
+                        amount INTEGER
+                );
+    INSERT INTO "catalog" VALUES(1,1,3,NULL,NULL,100);
+    INSERT INTO "catalog" VALUES(2,2,3,NULL,NULL,120);
+    INSERT INTO "catalog" VALUES(3,3,3,NULL,NULL,130);
+    INSERT INTO "catalog" VALUES(4,4,3,NULL,NULL,80);
+    ...
+    INSERT INTO "catalog" VALUES(75,75,3,NULL,NULL,30);
+    CREATE TABLE register (
+                            id INTEGER PRIMARY KEY,
+                      activity INTEGER REFERENCES activity(id),
+                         actor INTEGER REFERENCES actor(id),
+                       itsdate TEXT,
+                        amount INTEGER
+                );
