@@ -113,13 +113,21 @@ ways while still consuming APIs from GOSH.
 
 ## Database Schema Example
 
+The following example reports the whole schema with some example data. Two
+actors (*Alice* and *Bob*) are tied to a group (*TheSmiths*) via the
+support table `actor_membership`. An account is set up for each human
+actor, but not for the group they belong to. Some Activities are loaded
+and a Catalog is populated from those activities, associating each catalog
+entry to the group of *TheSmiths* so that both *Alice* and *Bob* can
+access them.
+
     CREATE TABLE actor (
                             id INTEGER PRIMARY KEY,
                    displayname TEXT
                 );
-    INSERT INTO "actor" VALUES(1,'Silvia');
-    INSERT INTO "actor" VALUES(2,'Flavio');
-    INSERT INTO "actor" VALUES(3,'Silvia & Flavio');
+    INSERT INTO "actor" VALUES(1,'Alice);
+    INSERT INTO "actor" VALUES(2,'Bot);
+    INSERT INTO "actor" VALUES(3,'TheSmiths');
     CREATE TABLE actor_membership (
                             id INTEGER PRIMARY KEY,
                         member INTEGER references actor(id),
@@ -135,8 +143,8 @@ ways while still consuming APIs from GOSH.
                       password TEXT,
                    displayname TEXT
                 );
-    INSERT INTO "account" VALUES(1,1,'silvia','silvia','Silvia Nardoni');
-    INSERT INTO "account" VALUES(2,2,'polettix','flavio','Flavio Poletti');
+    INSERT INTO "account" VALUES(1,1,'alice,'4lic3,'Alice Smiths');
+    INSERT INTO "account" VALUES(2,2,'bob,'wh4tev3r,'Bob Smiths);
     CREATE TABLE activity (
                             id INTEGER PRIMARY KEY,
                           name TEXT,
